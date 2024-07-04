@@ -1,13 +1,18 @@
-const express = require('express')
-const app = express();
+const mysql = require('mysql2');
 
-const moviesRouter = require('../routes/movieRoutes')
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '123456',
+    database: 'movies_db'
+});
 
-app.use(express.json());
-app.use("/movies", moviesRouter)
+connection.connect((err) => {
+    if (err) {
+        console.log('ERROR CONECTANDO CON LA DATABASE:', err);
+    } else {
+        console.log('CONECTADO CON LA DATABASE');
+    }
+});
 
-const PORT = 3000;
-
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
-})
+module.exports = connection;

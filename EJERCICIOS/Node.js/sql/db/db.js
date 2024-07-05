@@ -10,9 +10,31 @@ const connection = mysql.createConnection({
 connection.connect((err) => {
     if (err) {
         console.log('ERROR CONECTANDO CON LA DATABASE:', err);
-    } else {
+      return
+    } 
         console.log('CONECTADO CON LA DATABASE');
-    }
-});
-
-module.exports = connection;
+    
+        
+        connection.query('CREATE DATABASE IF NOT EXISTS movies_db', (err, results) => {
+            if(err) console.log('ERROR CREATING DATABASE:', err)
+                console.log("DATABASE ENSURED")
+            connection.changeUser({database: "movies_db"}, (err, results) => {
+                if (err) console.log("ERROR SWITCHING TO movies_db:", err)
+                    
+                    const createTableQuery = `
+                    CREATE TABLE IF NOT EXISTS movies(
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        title VARCHAR( 255 ) NOT NULL,
+                        director VARCHAR( 255 ) NOT NULL,
+                        year INT NOT NULL
+                        );`
+                        
+                        connection.query(createTableQuery, (err,results) => {
+                            if(err) console.log('ERROR CREATING TABLE:', err)
+                                console.log("TABLE ENSURED.")
+                        })
+                    })
+                })
+                
+            });
+                module.exports = connection;

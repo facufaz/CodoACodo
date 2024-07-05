@@ -11,8 +11,8 @@ const getAllMovies = (req, res) => {
 };
 
 const getMovieById = (req, res) => {
-    const sql = 'SELECT * FROM movies WHERE id = ?';
     const id = req.params.id;
+    const sql = 'SELECT * FROM movies WHERE id = ?';
 
     db.query(sql, [id], (err, results) => {
         if (err) throw err;
@@ -21,12 +21,12 @@ const getMovieById = (req, res) => {
 };
 
 const createMovie = (req, res) => {
-    const sql = 'INSERT INTO movies SET ?';
-    const newMovie = req.body;
+    const {title, director, year} = req.body;
+    const sql = 'INSERT INTO movies (title, director, year) Values ( ?, ?, ?)';
 
-    db.query(sql, newMovie, (err, results) => {
+    db.query(sql, [title, director, year], (err, results) => {
         if (err) throw err;
-        res.status(201).json({ id: results.insertId, ...newMovie });
+        res.status(201).json({ message: 'Movie Created', movieId: results.insertId });
     });
 };
 
@@ -53,8 +53,8 @@ const deleteMovie = (req, res) => {
 
 module.exports = {
     getAllMovies,
-    // getMovieById,
-    // createMovie,
-    // updateMovie,
-    // deleteMovie,
+    getMovieById,
+    createMovie,
+    updateMovie,
+    deleteMovie,
 };

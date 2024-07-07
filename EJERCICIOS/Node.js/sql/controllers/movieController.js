@@ -21,14 +21,15 @@ const getMovieById = (req, res) => {
 };
 
 const createMovie = (req, res) => {
-    const {title, director, year} = req.body;
-    const sql = 'INSERT INTO movies (title, director, year) Values ( ?, ?, ?)';
+    const {title, year, views} = req.body;
+    const sql = 'INSERT INTO movies (title, year, views) Values ( ?, ?, ?)';
 
-    db.query(sql, [title, director, year], (err, results) => {
+    db.query(sql, [title, year, views], (err, results) => {
         if (err) throw err;
         res.status(201).json({ message: 'Movie Created', movieId: results.insertId });
     });
 };
+
 
 const updateMovie = (req, res) => {
     const sql = 'UPDATE movies SET ? WHERE id = ?';
@@ -53,6 +54,7 @@ const deleteMovie = (req, res) => {
 
 module.exports = {
     getAllMovies,
+    createData,
     getMovieById,
     createMovie,
     updateMovie,
